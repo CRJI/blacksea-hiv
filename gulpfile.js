@@ -9,6 +9,12 @@ gulp.task('jekyll', function() {
 });
 
 
+gulp.task('topojson', function() {
+  var p = child_process.exec('ogr2ogr -f geojson /vsistdout/ _data/ne_10m_admin_0_countries/ne_10m_admin_0_countries.shp -clipsrc 15 30 55 80 | topojson countries=/dev/fd/0 -s .00001 > countries.topojson', {stdio: [0, 1, 'pipe']});
+  return p.stderr;
+});
+
+
 gulp.task('serve', function() {
   var server = express();
   server.use(express.static('_site'));
