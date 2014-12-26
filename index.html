@@ -1,10 +1,43 @@
 <!doctype html>
 <meta charset="utf-8">
 
+<style>
+path {
+  fill: #ddd;
+  stroke-width: 1;
+  stroke: black;
+}
+</style>
+
 <body>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.1/d3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.1.0/topojson.min.js"></script>
 <script>
 'use strict';
 
-console.log('hi');
+var width = 400,
+    height = 400;
+
+var svg = d3.select('body').append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+var projection = d3.geo.mercator()
+    .translate([-150, 700])
+    .scale(500);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+d3.json('countries.topojson', function(error, topo) {
+  if (error) return console.error(error);
+  var countries = topojson.feature(topo, topo.objects.countries);
+
+  svg.append('path')
+      .datum(countries)
+      .attr('d', path);
+});
+
+
 </script>
