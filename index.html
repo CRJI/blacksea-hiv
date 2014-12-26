@@ -19,25 +19,18 @@ circle {
 <script>
 'use strict';
 
-var pop2010 = {
-  AZE: 9054332,
-  ARM: 2963496,
-  BGR: 7395599,
-  GEO: 4452800,
-  ROU: 20246871,
-  RUS: 142385523,
-  TUR: 72137546,
-  UKR: 45870700,
-  BLR: 9490000,
-  MDA: 3562045
+var country = {
+  AZE: {pop2010: 9054332},
+  ARM: {pop2010: 2963496},
+  BGR: {pop2010: 7395599},
+  GEO: {pop2010: 4452800},
+  ROU: {pop2010: 20246871},
+  RUS: {pop2010: 142385523},
+  TUR: {pop2010: 72137546},
+  UKR: {pop2010: 45870700},
+  BLR: {pop2010: 9490000},
+  MDA: {pop2010: 3562045}
 }
-
-var country = {};
-d3.keys(pop2010).forEach(function(adm0_a3) {
-  country[adm0_a3] = {
-    pop2010: pop2010[adm0_a3]
-  };
-});
 
 var width = 600,
     height = width * .75;
