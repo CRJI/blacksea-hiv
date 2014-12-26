@@ -26,22 +26,22 @@ var center = {
   BGR: [25.0,42.5],
   GEO: [44.0,42.0],
   ROU: [25.0,45.7],
-  RUS: [43.8,56.7],
+  RUS: [47.0,53.0],
   TUR: [36.0,39.0],
-  UKR: [32.0,49.5],
+  UKR: [34.0,49.0],
   BLR: [28.9,53.1],
   MDA: [28.5,47.2]
 };
 
-var width = 400,
-    height = 400;
+var width = 600,
+    height = width * .75;
 
 var svg = d3.select('body').append('svg')
     .attr('width', width)
     .attr('height', height);
 
 var projection = d3.geo.mercator()
-    .translate([-0.375 * width, 1.75 * width])
+    .translate([-0.375 * width, 1.55 * width])
     .scale(width * 1.25);
 
 var path = d3.geo.path()
