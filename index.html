@@ -32,6 +32,15 @@ var country = {
   MDA: {pop2010: 3562045}
 }
 
+var loop = function(values) {
+  var i = values.length - 1;
+  return function() {
+    i += 1;
+    if(i == values.length) { i = 0; }
+    return values[i];
+  };
+};
+
 var width = 600,
     height = width * .75;
 
@@ -47,7 +56,7 @@ var path = d3.geo.path()
     .projection(projection);
 
 var color = d3.scale.linear()
-    .domain([0, 10])
+    .domain([0, .5])
     .range(['#ddd', '#800'])
     .interpolate(d3.interpolateHcl);
 
@@ -74,10 +83,26 @@ d3.csv('hiv.csv').get(function(error, rows) {
     delete row.ADM0_A3;
     var sum = d3.sum(d3.values(row), function(d) { return +d; });
     var d = country[adm0_a3];
-    d.cp1k = sum / d.pop2010 * 1000;
+    d.cp1kTotal = sum / d.pop2010 * 1000;
+    d.cp1k = {};
+    d3.entries(row).forEach(function(e) {
+      d.cp1k[e.key] = e.value / d.pop2010 * 1000;
+    });
   });
-  svg.selectAll('path')
-      .attr('fill', function(d) { return color(d.cp1k); });
+
+  var yearLabel = svg.append('text')
+      .attr('y', 20);
+
+  var nextYear = loop(d3.keys(rows[0])
+      .map(function(d) { return +d; })
+      .sort());
+
+  setInterval(function() {
+      var year = nextYear();
+      yearLabel.text(year);
+      svg.selectAll('path')
+          .attr('fill', function(d) { return color(d.cp1k[year]); });
+    }, 200);
 });
 
 
