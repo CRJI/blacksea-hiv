@@ -70,7 +70,8 @@ d3.json('countries.topojson', function(error, topo) {
       .attr('d', path);
 });
 
-d3.csv('hiv.csv').get(function(err, rows) {
+d3.csv('hiv.csv').get(function(error, rows) {
+  if (error) return console.error(error);
   var total = rows.map(function(row) {
     var adm0_a3 = row.ADM0_A3;
     delete row.ADM0_A3;
