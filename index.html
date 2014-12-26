@@ -64,8 +64,9 @@ d3.json('countries.topojson', function(error, topo) {
   if (error) return console.error(error);
   var countries = topojson.feature(topo, topo.objects.countries);
 
-  svg.append('path')
-      .datum(countries)
+  svg.selectAll('path')
+      .data(countries.features)
+    .enter().append('path')
       .attr('d', path);
 });
 
