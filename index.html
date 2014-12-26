@@ -67,14 +67,19 @@ var projection = d3.geo.mercator()
 var path = d3.geo.path()
     .projection(projection);
 
+svg.selectAll('path')
+    .data(d3.values(country))
+  .enter().append('path');
+
 d3.json('countries.topojson', function(error, topo) {
   if (error) return console.error(error);
   var countries = topojson.feature(topo, topo.objects.countries);
-
+  countries.features.forEach(function(feature) {
+    var adm0_a3 = feature.properties.ADM0_A3;
+    country[adm0_a3].feature = feature;
+  });
   svg.selectAll('path')
-      .data(countries.features)
-    .enter().append('path')
-      .attr('d', path);
+      .attr('d', function(d) { return path(d.feature); });
 });
 
 d3.csv('hiv.csv').get(function(error, rows) {
