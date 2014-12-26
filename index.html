@@ -41,8 +41,8 @@ var svg = d3.select('body').append('svg')
     .attr('height', height);
 
 var projection = d3.geo.mercator()
-    .translate([-150, 700])
-    .scale(500);
+    .translate([-0.375 * width, 1.75 * width])
+    .scale(width * 1.25);
 
 var path = d3.geo.path()
     .projection(projection);
@@ -69,7 +69,7 @@ d3.csv('hiv.csv').get(function(err, rows) {
     .enter().append('circle')
       .attr('cx', function(d) { return d.p[0]; })
       .attr('cy', function(d) { return d.p[1]; })
-      .attr('r', function(d) { return Math.sqrt(d.total) * .08; });
+      .attr('r', function(d) { return Math.sqrt(d.total) * .0002 * width; });
 });
 
 
