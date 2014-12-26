@@ -7,6 +7,10 @@ path {
   stroke-width: 1;
   stroke: black;
 }
+
+circle {
+  fill: #800;
+}
 </style>
 
 <body>
@@ -15,6 +19,19 @@ path {
 <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.1.0/topojson.min.js"></script>
 <script>
 'use strict';
+
+var center = {
+  AZE: [48.0,40.5],
+  ARM: [44.7,40.5],
+  BGR: [25.0,42.5],
+  GEO: [44.0,42.0],
+  ROU: [25.0,45.7],
+  RUS: [43.8,56.7],
+  TUR: [36.0,39.0],
+  UKR: [32.0,49.5],
+  BLR: [28.9,53.1],
+  MDA: [28.5,47.2]
+};
 
 var width = 400,
     height = 400;
@@ -37,6 +54,22 @@ d3.json('countries.topojson', function(error, topo) {
   svg.append('path')
       .datum(countries)
       .attr('d', path);
+});
+
+d3.csv('hiv.csv').get(function(err, rows) {
+  var total = rows.map(function(row) {
+    var adm0_a3 = row.ADM0_A3;
+    delete row.ADM0_A3;
+    var sum = d3.sum(d3.values(row), function(d) { return +d; });
+    return {ADM0_A3: adm0_a3, p: projection(center[adm0_a3]), total: sum};
+  });
+
+  svg.selectAll('circle')
+      .data(total)
+    .enter().append('circle')
+      .attr('cx', function(d) { return d.p[0]; })
+      .attr('cy', function(d) { return d.p[1]; })
+      .attr('r', function(d) { return Math.sqrt(d.total) * .08; });
 });
 
 
