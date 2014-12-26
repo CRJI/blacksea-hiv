@@ -46,6 +46,13 @@ var pop2010 = {
   MDA: 3562045
 }
 
+var country = {};
+d3.keys(pop2010).forEach(function(adm0_a3) {
+  country[adm0_a3] = {
+    pop2010: pop2010[adm0_a3]
+  };
+});
+
 var width = 600,
     height = width * .75;
 
