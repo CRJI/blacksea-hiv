@@ -37,6 +37,7 @@ gulp.task('serve', function() {
 gulp.task('devel', function() {
   gulp.watch([
       '_config.yml',
+      'countries.topojson',
       'index.html'
     ], ['jekyll']);
 
