@@ -46,4 +46,12 @@ gulp.task('devel', function() {
 });
 
 
+gulp.task('direct', function() {
+  var server = express();
+  server.use(express.static('.'));
+  server.listen(+(process.env.port || 5000));
+  return require('q').defer().promise;
+});
+
+
 gulp.task('default', ['jekyll']);
