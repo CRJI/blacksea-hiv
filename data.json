@@ -1,0 +1,42 @@
+{
+  "AZE": {
+    "rate": 0.1547,
+    "cp1kTotal": 0.179
+  },
+  "ARM": {
+    "rate": 0.1741,
+    "cp1kTotal": 1.443
+  },
+  "BGR": {
+    "rate": 0.1097,
+    "cp1kTotal": 0.248
+  },
+  "GEO": {
+    "rate": 0.1649,
+    "cp1kTotal": 0.926
+  },
+  "ROU": {
+    "rate": 0.1261,
+    "cp1kTotal": 0.222
+  },
+  "RUS": {
+    "rate": 0.0417,
+    "cp1kTotal": 5.603
+  },
+  "TUR": {
+    "rate": 0.1474,
+    "cp1kTotal": 0.102
+  },
+  "UKR": {
+    "rate": 0.0862,
+    "cp1kTotal": 5.335
+  },
+  "BLR": {
+    "rate": 0.0484,
+    "cp1kTotal": 1.655
+  },
+  "MDA": {
+    "rate": 0.0864,
+    "cp1kTotal": 2.412
+  }
+}

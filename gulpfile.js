@@ -26,6 +26,38 @@ gulp.task('topojson', function() {
 });
 
 
+gulp.task('regression', function() {
+  var regression = require('regression'),
+      fs = require('fs'),
+      d3 = require('d3');
+
+  var hiv_csv = d3.csv.parse(fs.readFileSync(__dirname + '/hiv.csv', 'utf8'));
+  var pop2010 = JSON.parse(fs.readFileSync(__dirname + '/pop2010.json', 'utf8'));
+  var rv = {};
+
+  hiv_csv.forEach(function(row) {
+    var adm0_a3 = row.ADM0_A3;
+    delete row.ADM0_A3;
+    var data = d3.keys(row)
+      .map(function(d) { return +d; })
+      .sort()
+      .map(function(year) {
+        var x = year - 2013;
+        var value = row[year] ? +row[year] : null;
+        return [x, value];
+      });
+    var exp = regression('exponential', data).equation[1];
+    var total = d3.sum(d3.values(row), function(d) { return +d; });
+    rv[adm0_a3] = {
+      rate: d3.round(exp, 4),
+      cp1kTotal: d3.round(total / pop2010[adm0_a3] * 1000, 3)
+    };
+  });
+
+  fs.writeFileSync(__dirname + '/data.json', JSON.stringify(rv, null, 2));
+});
+
+
 gulp.task('serve', function() {
   var server = express();
   server.use(express.static('_site'));
