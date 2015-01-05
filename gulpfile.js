@@ -15,7 +15,7 @@ gulp.task('topojson', function() {
     '_data/ne_10m_admin_0_countries/ne_10m_admin_0_countries.shp ' +
     "-where \"ADM0_A3 IN ('AZE', 'ARM', 'BGR', 'GEO', 'ROU', " +
                          "'RUS', 'TUR', 'UKR', 'BLR', 'MDA')\" " +
-    '-clipsrc 15 30 55 80 ' +
+    '-clipsrc 15 30 57 80 ' +
     '| topojson countries=/dev/fd/0 ' +
     '-s .00001 ' +
     '-p ADM0_A3 ' +
