@@ -1,0 +1,115 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<style>
+path {
+  stroke-width: 1;
+  stroke: black;
+}
+
+circle {
+  fill: #800;
+}
+</style>
+
+<body>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.1/d3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.1.0/topojson.min.js"></script>
+<script>
+'use strict';
+
+var country = {
+  AZE: {pop2010: 9054332},
+  ARM: {pop2010: 2963496},
+  BGR: {pop2010: 7395599},
+  GEO: {pop2010: 4452800},
+  ROU: {pop2010: 20246871},
+  RUS: {pop2010: 142385523},
+  TUR: {pop2010: 72137546},
+  UKR: {pop2010: 45870700},
+  BLR: {pop2010: 9490000},
+  MDA: {pop2010: 3562045}
+}
+
+var loop = function(values) {
+  var i = values.length - 1;
+  return function() {
+    i += 1;
+    if(i == values.length) { i = 0; }
+    return values[i];
+  };
+};
+
+var width = 600,
+    height = width * .75;
+
+var svg = d3.select('body').append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+var projection = d3.geo.mercator()
+    .translate([-0.375 * width, 1.55 * width])
+    .scale(width * 1.25);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var color = d3.scale.linear()
+    .domain([0, .5])
+    .range(['#ddd', '#800'])
+    .interpolate(d3.interpolateHcl);
+
+
+svg.selectAll('path')
+    .data(d3.values(country))
+  .enter().append('path');
+
+d3.json('../countries.topojson', function(error, topo) {
+  if (error) return console.error(error);
+  var countries = topojson.feature(topo, topo.objects.countries);
+  countries.features.forEach(function(feature) {
+    var adm0_a3 = feature.properties.ADM0_A3;
+    country[adm0_a3].feature = feature;
+  });
+  svg.selectAll('path')
+      .attr('d', function(d) { return path(d.feature); });
+});
+
+d3.csv('../hiv.csv').get(function(error, rows) {
+  if (error) return console.error(error);
+
+  var decade = function(year) {
+    if(year < 1994) return 1993;
+    if(year < 2004) return 2003;
+    if(year < 2014) return 2013;
+  };
+
+  rows.forEach(function(row) {
+    var adm0_a3 = row.ADM0_A3;
+    delete row.ADM0_A3;
+    var sum = d3.sum(d3.values(row), function(d) { return +d; });
+    var d = country[adm0_a3];
+    d.cp1kTotal = sum / d.pop2010 * 1000;
+    d.byDecade = {}
+    d3.entries(row).forEach(function(e) {
+      var k = decade(+e.key);
+      d.byDecade[k] = (d.byDecade[k] || 0) + e.value / d.pop2010 * 1000;
+    });
+  });
+
+  var yearLabel = svg.append('text')
+      .attr('y', 20);
+
+  var nextDecade = loop([1993, 2003, 2013]);
+
+  setInterval(function() {
+      var decade = nextDecade();
+      yearLabel.text(decade);
+      svg.selectAll('path')
+          .attr('fill', function(d) { return color(d.byDecade[decade]/10); });
+    }, 1000);
+});
+
+
+</script>
