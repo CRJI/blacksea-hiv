@@ -24,9 +24,8 @@ gulp.task('topojson', function() {
 });
 
 
-gulp.task('regression', function() {
-  var regression = require('regression'),
-      fs = require('fs'),
+gulp.task('data', function() {
+  var fs = require('fs'),
       d3 = require('d3');
 
   var hiv_csv = d3.csv.parse(fs.readFileSync(__dirname + '/hiv.csv', 'utf8'));
@@ -74,10 +73,11 @@ gulp.task('regression', function() {
           data.push([x, cumulative]);
         }
       });
-    var exp = regression('exponential', data).equation[1];
+    var sum10y = d3.sum(d3.range(2004, 2014).map(function(year) {
+      return +row[year]; }));
     var total = d3.sum(d3.values(row), function(d) { return +d; });
     rv[adm0_a3] = {
-      rate: d3.round(exp, 4),
+      rate: d3.round(sum10y / 10 / pop2010[adm0_a3] * 100000, 4),
       cp1kTotal: d3.round(total / pop2010[adm0_a3] * 1000, 3)
     };
   });
