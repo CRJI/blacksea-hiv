@@ -117,34 +117,38 @@ var legend = svg.append('g')
 
 legend.append('rect')
     .attr('x', -2)
-    .attr('y', -.22 * height)
-    .attr('height', height * .22 + 2)
+    .attr('y', -.24 * height)
+    .attr('height', height * .24 + 2)
     .attr('width', width * .45 + 2);
 
 legend.append('text')
-    .attr('y', -.17 * height)
-    .text('New cases per 100,000');
+    .attr('y', -.20 * height)
+    .text("HIV/AIDS cases per 100,000 population")
+
+legend.append('text')
+    .attr('y', -.14 * height)
+    .text("New every year");
 
 var legendBox = legend.selectAll('.box')
     .data([0, 20, 40])
   .enter().append('g')
     .attr('class', 'box')
     .attr('transform', function(d, i) {
-        return 'translate(' + (155 + i * 35) + ',' + (-.17 * height - 15) + ')' });
+        return 'translate(' + (115 + i * 50) + ',' + (-.14 * height - 15) + ')' });
 
 legendBox.append('rect')
-    .attr('width', 30)
+    .attr('width', 40)
     .attr('height', 20)
     .attr('fill', function(d) { return color(d) });
 
 legendBox.append('text')
     .text(function(d) { return d; })
     .attr('y', 15)
-    .each(function(d) { d3.select(this).attr('x', 15 - this.getBBox().width / 2) });
+    .each(function(d) { d3.select(this).attr('x', 20 - this.getBBox().width / 2) });
 
 legend.append('text')
-    .attr('y', -.10 * height)
-    .text('Total cases per 100,000');
+    .attr('y', -.07 * height)
+    .text("Total");
 
 var legendCircle = legend.selectAll('circle')
     .data([
