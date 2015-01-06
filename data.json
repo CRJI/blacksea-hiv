@@ -1,6 +1,6 @@
 {
   "ARM": {
-    "rate": 0.2007,
+    "rate": 0.1963,
     "cp1kTotal": 0.546
   },
   "AZE": {
@@ -12,7 +12,7 @@
     "cp1kTotal": 0.248
   },
   "GEO": {
-    "rate": 0.2277,
+    "rate": 0.2267,
     "cp1kTotal": 0.926
   },
   "ROU": {
@@ -36,7 +36,7 @@
     "cp1kTotal": 1.655
   },
   "MDA": {
-    "rate": 0.1649,
+    "rate": 0.1639,
     "cp1kTotal": 2.412
   }
 }

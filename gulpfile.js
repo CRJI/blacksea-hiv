@@ -37,14 +37,17 @@ gulp.task('regression', function() {
     var adm0_a3 = row.ADM0_A3;
     delete row.ADM0_A3;
     var cumulative = 0;
-    var data = d3.keys(row)
+    var data = [];
+    d3.keys(row)
       .map(function(d) { return +d; })
       .sort()
       .map(function(year) {
         var x = year - 2013;
         var value = row[year] ? +row[year] : null;
         cumulative += value;
-        return [x, cumulative];
+        if(value) {
+          data.push([x, cumulative]);
+        }
       });
     var exp = regression('exponential', data).equation[1];
     var total = d3.sum(d3.values(row), function(d) { return +d; });
