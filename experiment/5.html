@@ -1,0 +1,208 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<style>
+.landmass {
+  stroke-width: .7;
+  stroke: black;
+  fill: #eee;
+}
+
+.borders {
+  stroke-width: .5;
+  stroke: black;
+  fill: none;
+}
+
+circle {
+  opacity: .8;
+  stroke-width: .5;
+  stroke: black;
+}
+
+.legend > rect {
+  opacity: .8;
+  fill: white;
+  stroke-width: 1;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.box rect {
+  stroke-width: 1;
+  stroke: #888;
+  shape-rendering: crispEdges;
+}
+</style>
+
+<body>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.1/d3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+<script>
+'use strict';
+
+var country = {
+  ARM: {center: [44.7,40.2], label: [42.6,38.7], name: "Armenia"},
+  AZE: {center: [48.0,40.5], label: [46.6,41.4], name: "Azerbaijan"},
+  BGR: {center: [25.4,42.8], label: [23.0,41.8], name: "Bulgaria"},
+  BLR: {center: [28.4,53.9], label: [26.3,52.3], name: "Belarus"},
+  GEO: {center: [43.5,42.0], label: [40.8,43.2], name: "Georgia"},
+  MDA: {center: [28.5,47.2], label: [28.0,44.9], name: "Moldova"},
+  ROU: {center: [24.8,45.9], label: [23.3,44.3], name: "Romania"},
+  RUS: {center: [42.8,53.3], label: [41.8,50.4], name: "Russia"},
+  TUR: {center: [37.1,39.3], label: [36.1,38.0], name: "Turkey"},
+  UKR: {center: [33.6,49.2], label: [26.7,49.9], name: "Urkaine"}
+}
+
+var width = 600,
+    height = width * .75;
+
+var svg = d3.select('body').append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+var projection = d3.geo.mercator()
+    .translate([-0.37 * width, 1.68 * width])
+    .scale(width * 1.4);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var color = d3.scale.linear()
+    .domain([0, 50])
+    .range(['#ddd', '#800'])
+    .interpolate(d3.interpolateHcl);
+
+var size = function(cp1k) {
+    return Math.sqrt(cp1k) * .035 * width;
+};
+
+
+var landmass = svg.append('path').attr('class', 'landmass');
+var borders = svg.append('path').attr('class', 'borders');
+var circleGroup = svg.append('g');
+
+d3.json('countries.topojson', function(error, topo) {
+  if (error) return console.error(error);
+
+  landmass.attr('d', path(topojson.merge(topo, topo.objects.countries.geometries)));
+  borders.attr('d', path(topojson.mesh(topo, topo.objects.countries, function(a, b) {
+    if(a === b) return false;
+    if(country[a.properties.ADM0_A3] || country[b.properties.ADM0_A3]) return true;
+    return false;
+  })));
+});
+
+d3.json('data.json').get(function(error, data) {
+  if (error) return console.error(error);
+
+  d3.keys(country).forEach(function(adm0_a3) {
+    country[adm0_a3].rate = data[adm0_a3].rate;
+    country[adm0_a3].cp1kTotal = data[adm0_a3].cp1kTotal;
+  });
+
+  var dragCircle = d3.behavior.drag()
+      .on('drag', function(d) {
+        d3.select(this).attr('cx', d3.event.x).attr('cy', d3.event.y);
+        d.center = projection.invert([d3.event.x, d3.event.y]).map(function(v) { return d3.round(v, 1) });
+      });
+
+  var dragLabel = d3.behavior.drag()
+      .on('drag', function(d) {
+        d3.select(this).attr('x', d3.event.x).attr('y', d3.event.y);
+        d.label = projection.invert([d3.event.x, d3.event.y]).map(function(v) { return d3.round(v, 1) });
+      });
+
+  circleGroup.selectAll('circle')
+      .data(d3.values(country))
+    .enter().append('circle')
+      .attr('cx', function(d) { return projection(d.center)[0]; })
+      .attr('cy', function(d) { return projection(d.center)[1]; })
+      .attr('r', function(d) { return size(d.cp1kTotal); })
+      .attr('fill', function(d) { return color(d.rate); })
+      .call(dragCircle);
+
+  circleGroup.selectAll('text')
+      .data(d3.values(country))
+    .enter().append('text')
+      .text(function(d) { return d.name })
+      .attr('x', function(d) { return projection(d.label)[0]; })
+      .attr('y', function(d) { return projection(d.label)[1]; })
+      .each(function(d) {
+          d.label = projection.invert([d3.select(this).attr('x'), d3.select(this).attr('y')]).map(function(v) { return d3.round(v, 1) });
+        })
+      .call(dragLabel);
+
+  window.centers = function() {
+    return d3.keys(country).sort().map(function(adm0_a3) {
+      return adm0_a3 + ": [" + country[adm0_a3].center + "]\n";
+    }).join("");
+  };
+
+  window.labels = function() {
+    return d3.keys(country).sort().map(function(adm0_a3) {
+      return adm0_a3 + ": [" + country[adm0_a3].label + "]\n";
+    }).join("");
+  };
+});
+
+var legend = svg.append('g')
+    .attr('class', 'legend')
+    .attr('transform', 'translate(0,' + height + ')');
+
+legend.append('rect')
+    .attr('x', -2)
+    .attr('y', -.24 * height)
+    .attr('height', height * .24 + 2)
+    .attr('width', width * .45 + 2);
+
+legend.append('text')
+    .attr('y', -.20 * height)
+    .text("HIV/AIDS cases per 100,000 population")
+
+legend.append('text')
+    .attr('y', -.14 * height)
+    .text("New every year");
+
+var legendBox = legend.selectAll('.box')
+    .data([0, 20, 40])
+  .enter().append('g')
+    .attr('class', 'box')
+    .attr('transform', function(d, i) {
+        return 'translate(' + (115 + i * 50) + ',' + (-.14 * height - 15) + ')' });
+
+legendBox.append('rect')
+    .attr('width', 40)
+    .attr('height', 20)
+    .attr('fill', function(d) { return color(d) });
+
+legendBox.append('text')
+    .text(function(d) { return d; })
+    .attr('y', 15)
+    .each(function(d) { d3.select(this).attr('x', 20 - this.getBBox().width / 2) });
+
+legend.append('text')
+    .attr('y', -.07 * height)
+    .text("Total");
+
+var legendCircle = legend.selectAll('circle')
+    .data([
+      {cp1k: 1, x: 50},
+      {cp1k: 3, x: 117},
+      {cp1k: 5, x: 210}
+    ])
+  .enter().append('g')
+    .attr('transform', function(d) {
+        return 'translate(' + d.x + ',' + (-.01 * height) + ')' });
+
+legendCircle.append('circle')
+    .attr('r', function(d) { return size(d.cp1k) })
+    .attr('fill', color(0));
+
+legendCircle.append('text')
+    .text(function(d) { return d.cp1k * 100; })
+    .each(function(d) { d3.select(this).attr('x', - this.getBBox().width / 2) });
+
+
+</script>
