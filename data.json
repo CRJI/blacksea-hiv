@@ -1,11 +1,11 @@
 {
-  "AZE": {
-    "rate": 0.1547,
-    "cp1kTotal": 0.179
-  },
   "ARM": {
+    "rate": 0.1547,
+    "cp1kTotal": 0.546
+  },
+  "AZE": {
     "rate": 0.1741,
-    "cp1kTotal": 1.443
+    "cp1kTotal": 0.472
   },
   "BGR": {
     "rate": 0.1097,
