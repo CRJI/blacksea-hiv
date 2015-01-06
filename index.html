@@ -43,16 +43,16 @@ circle {
 'use strict';
 
 var country = {
-  AZE: {center: [48.0, 40.5]},
-  ARM: {center: [44.7, 40.2]},
-  BGR: {center: [25.0, 42.5]},
-  GEO: {center: [43.5, 42.0]},
-  ROU: {center: [25.0, 45.7]},
-  RUS: {center: [47.0, 53.0]},
-  TUR: {center: [36.0, 39.0]},
-  UKR: {center: [34.0, 49.0]},
-  BLR: {center: [28.0, 53.5]},
-  MDA: {center: [28.5, 47.2]}
+  AZE: {center: [48.0, 40.5], name: "Azerbaijan"},
+  ARM: {center: [44.7, 40.2], name: "Armenia"},
+  BGR: {center: [25.0, 42.5], name: "Bulgaria"},
+  GEO: {center: [43.5, 42.0], name: "Georgia"},
+  ROU: {center: [25.0, 45.7], name: "Romania"},
+  RUS: {center: [47.0, 53.0], name: "Russia"},
+  TUR: {center: [36.0, 39.0], name: "Turkey"},
+  UKR: {center: [34.0, 49.0], name: "Urkaine"},
+  BLR: {center: [28.0, 53.5], name: "Belarus"},
+  MDA: {center: [28.5, 47.2], name: "Moldova"}
 }
 
 var width = 600,
@@ -109,6 +109,15 @@ d3.json('data.json').get(function(error, data) {
       .attr('cy', function(d) { return projection(d.center)[1]; })
       .attr('r', function(d) { return size(d.cp1kTotal); })
       .attr('fill', function(d) { return color(d.rate); });
+
+  circleGroup.selectAll('text')
+      .data(d3.values(country))
+    .enter().append('text')
+      .text(function(d) { return d.name })
+      .attr('y', function(d) {
+          return projection(d.center)[1] + size(d.cp1kTotal) + 15 })
+      .each(function(d) {
+          d3.select(this).attr('x', projection(d.center)[0] - this.getBBox().width / 2) });
 });
 
 var legend = svg.append('g')
