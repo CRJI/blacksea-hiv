@@ -15,7 +15,7 @@ gulp.task('topojson', function() {
     '_data/ne_10m_admin_0_countries/ne_10m_admin_0_countries.shp ' +
     '-clipsrc 15 30 57 80 ' +
     '| topojson countries=/dev/fd/0 ' +
-    '-s .00001 ' +
+    '-s .000005 ' +
     '-p ADM0_A3 ' +
     ' > countries.topojson',
     {stdio: [0, 1, 'pipe']}
