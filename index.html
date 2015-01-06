@@ -43,16 +43,16 @@ circle {
 'use strict';
 
 var country = {
-  AZE: {center: [48.0, 40.5], name: "Azerbaijan"},
-  ARM: {center: [44.7, 40.2], name: "Armenia"},
-  BGR: {center: [25.0, 42.5], name: "Bulgaria"},
-  GEO: {center: [43.5, 42.0], name: "Georgia"},
-  ROU: {center: [25.0, 45.7], name: "Romania"},
-  RUS: {center: [47.0, 53.0], name: "Russia"},
-  TUR: {center: [36.0, 39.0], name: "Turkey"},
-  UKR: {center: [34.0, 49.0], name: "Urkaine"},
-  BLR: {center: [28.0, 53.5], name: "Belarus"},
-  MDA: {center: [28.5, 47.2], name: "Moldova"}
+  ARM: {center: [44.7,40.2], label: [42.6,38.7], name: "Armenia"},
+  AZE: {center: [48.0,40.5], label: [46.6,41.4], name: "Azerbaijan"},
+  BGR: {center: [25.4,42.8], label: [23.0,41.8], name: "Bulgaria"},
+  BLR: {center: [28.4,53.9], label: [26.3,52.3], name: "Belarus"},
+  GEO: {center: [43.5,42.0], label: [40.8,43.2], name: "Georgia"},
+  MDA: {center: [28.5,47.2], label: [28.0,44.9], name: "Moldova"},
+  ROU: {center: [24.8,45.9], label: [23.3,44.3], name: "Romania"},
+  RUS: {center: [42.8,53.3], label: [41.8,50.4], name: "Russia"},
+  TUR: {center: [37.1,39.3], label: [36.1,38.0], name: "Turkey"},
+  UKR: {center: [33.6,49.2], label: [26.7,49.9], name: "Urkaine"}
 }
 
 var width = 600,
@@ -114,10 +114,8 @@ d3.json('data.json').get(function(error, data) {
       .data(d3.values(country))
     .enter().append('text')
       .text(function(d) { return d.name })
-      .attr('y', function(d) {
-          return projection(d.center)[1] + size(d.cp1kTotal) + 15 })
-      .each(function(d) {
-          d3.select(this).attr('x', projection(d.center)[0] - this.getBBox().width / 2) });
+      .attr('x', function(d) { return projection(d.label)[0]; })
+      .attr('y', function(d) { return projection(d.label)[1]; });
 });
 
 var legend = svg.append('g')
