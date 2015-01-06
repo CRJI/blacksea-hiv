@@ -31,7 +31,29 @@ gulp.task('regression', function() {
 
   var hiv_csv = d3.csv.parse(fs.readFileSync(__dirname + '/hiv.csv', 'utf8'));
   var pop2010 = JSON.parse(fs.readFileSync(__dirname + '/pop2010.json', 'utf8'));
+  var rograph = JSON.parse(fs.readFileSync(__dirname + '/rograph.json', 'utf8'));
+  var roage = {children: 0.26, adults: 0.74};
   var rv = {};
+
+  var rodata = {};
+  var sums = {};
+  d3.keys(rograph).forEach(function(key) {
+    var data = rograph[key];
+    var scale = d3.scale.linear()
+        .domain(data.scale.domain)
+        .range(data.scale.range);
+    d3.range(1987, 2014).forEach(function(year) {
+      ['children', 'adults'].forEach(function(name) {
+        var y = data[name][year];
+        if(y) {
+          var value = scale.invert(y) / 100000 * pop2010['ROU'] * roage[name];
+          rodata[year] = (rodata[year] || 0) + value;
+          var k = key + '-' + name;
+          sums[k] = (sums[k] || 0) + value;
+        }
+      });
+    });
+  });
 
   hiv_csv.forEach(function(row) {
     var adm0_a3 = row.ADM0_A3;
@@ -44,6 +66,9 @@ gulp.task('regression', function() {
       .map(function(year) {
         var x = year - 2013;
         var value = row[year] ? +row[year] : null;
+        if(adm0_a3 == 'ROU' && ! value && rodata[year]) {
+          row[year] = value = d3.round(rodata[year]);
+        }
         cumulative += value;
         if(value) {
           data.push([x, cumulative]);
