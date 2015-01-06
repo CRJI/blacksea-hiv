@@ -20,11 +20,17 @@ circle {
   stroke: black;
 }
 
-.legend rect {
+.legend > rect {
   opacity: .8;
   fill: white;
   stroke-width: 1;
   stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.box rect {
+  stroke-width: 1;
+  stroke: #888;
   shape-rendering: crispEdges;
 }
 </style>
@@ -111,13 +117,34 @@ var legend = svg.append('g')
 
 legend.append('rect')
     .attr('x', -2)
-    .attr('y', -.15 * height)
-    .attr('height', height * .25 + 2)
+    .attr('y', -.22 * height)
+    .attr('height', height * .22 + 2)
     .attr('width', width * .45 + 2);
 
 legend.append('text')
+    .attr('y', -.17 * height)
+    .text('New cases per 100,000');
+
+var legendBox = legend.selectAll('.box')
+    .data([0, 20, 40])
+  .enter().append('g')
+    .attr('class', 'box')
+    .attr('transform', function(d, i) {
+        return 'translate(' + (155 + i * 35) + ',' + (-.17 * height - 15) + ')' });
+
+legendBox.append('rect')
+    .attr('width', 30)
+    .attr('height', 20)
+    .attr('fill', function(d) { return color(d) });
+
+legendBox.append('text')
+    .text(function(d) { return d; })
+    .attr('y', 15)
+    .each(function(d) { d3.select(this).attr('x', 15 - this.getBBox().width / 2) });
+
+legend.append('text')
     .attr('y', -.10 * height)
-    .text('cases per 100k population');
+    .text('Total cases per 100,000');
 
 var legendCircle = legend.selectAll('circle')
     .data([
@@ -135,9 +162,7 @@ legendCircle.append('circle')
 
 legendCircle.append('text')
     .text(function(d) { return d.cp1k * 100; })
-    .each(function(d) {
-      d3.select(this).attr('x', - this.getBBox().width / 2);
-    });
+    .each(function(d) { d3.select(this).attr('x', - this.getBBox().width / 2) });
 
 
 </script>
