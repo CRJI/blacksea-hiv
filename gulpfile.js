@@ -32,7 +32,7 @@ gulp.task('data', function() {
   var pop2010 = JSON.parse(fs.readFileSync(__dirname + '/pop2010.json', 'utf8'));
   var rograph = JSON.parse(fs.readFileSync(__dirname + '/rograph.json', 'utf8'));
   var roage = {children: 0.26, adults: 0.74};
-  var rv = {};
+  var rv = {country: {}};
 
   var rodata = {};
   var sums = {};
@@ -76,7 +76,7 @@ gulp.task('data', function() {
     var sum10y = d3.sum(d3.range(2004, 2014).map(function(year) {
       return +row[year]; }));
     var total = d3.sum(d3.values(row), function(d) { return +d; });
-    rv[adm0_a3] = {
+    rv.country[adm0_a3] = {
       rate: d3.round(sum10y / 10 / pop2010[adm0_a3] * 100000, 4),
       cp1kTotal: d3.round(total / pop2010[adm0_a3] * 1000, 3)
     };

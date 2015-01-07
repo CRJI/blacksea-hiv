@@ -102,8 +102,8 @@ d3.json('data.json').get(function(error, data) {
   if (error) return console.error(error);
 
   d3.keys(country).forEach(function(adm0_a3) {
-    country[adm0_a3].rate = data[adm0_a3].rate;
-    country[adm0_a3].cp1kTotal = data[adm0_a3].cp1kTotal;
+    country[adm0_a3].rate = data.country[adm0_a3].rate;
+    country[adm0_a3].cp1kTotal = data.country[adm0_a3].cp1kTotal;
   });
 
   circleGroup.selectAll('circle')

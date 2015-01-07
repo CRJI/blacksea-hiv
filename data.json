@@ -1,42 +1,44 @@
 {
-  "ARM": {
-    "rate": 4.6567,
-    "cp1kTotal": 0.546
-  },
-  "AZE": {
-    "rate": 4.3162,
-    "cp1kTotal": 0.472
-  },
-  "BGR": {
-    "rate": 1.847,
-    "cp1kTotal": 0.248
-  },
-  "GEO": {
-    "rate": 8.1904,
-    "cp1kTotal": 0.926
-  },
-  "ROU": {
-    "rate": 2.8888,
-    "cp1kTotal": 0.986
-  },
-  "RUS": {
-    "rate": 37.5325,
-    "cp1kTotal": 5.603
-  },
-  "TUR": {
-    "rate": 0.7825,
-    "cp1kTotal": 0.102
-  },
-  "UKR": {
-    "rate": 39.7509,
-    "cp1kTotal": 5.335
-  },
-  "BLR": {
-    "rate": 10.7734,
-    "cp1kTotal": 1.655
-  },
-  "MDA": {
-    "rate": 18.6634,
-    "cp1kTotal": 2.412
+  "country": {
+    "ARM": {
+      "rate": 4.6567,
+      "cp1kTotal": 0.546
+    },
+    "AZE": {
+      "rate": 4.3162,
+      "cp1kTotal": 0.472
+    },
+    "BGR": {
+      "rate": 1.847,
+      "cp1kTotal": 0.248
+    },
+    "GEO": {
+      "rate": 8.1904,
+      "cp1kTotal": 0.926
+    },
+    "ROU": {
+      "rate": 2.8888,
+      "cp1kTotal": 0.986
+    },
+    "RUS": {
+      "rate": 37.5325,
+      "cp1kTotal": 5.603
+    },
+    "TUR": {
+      "rate": 0.7825,
+      "cp1kTotal": 0.102
+    },
+    "UKR": {
+      "rate": 39.7509,
+      "cp1kTotal": 5.335
+    },
+    "BLR": {
+      "rate": 10.7734,
+      "cp1kTotal": 1.655
+    },
+    "MDA": {
+      "rate": 18.6634,
+      "cp1kTotal": 2.412
+    }
   }
 }
