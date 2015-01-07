@@ -52,6 +52,11 @@ var yAxis = d3.svg.axis()
     .ticks(4)
     .orient('right');
 
+svg.append('text')
+    .attr('y', height * .05)
+    .attr('x', width * .05)
+    .text("New HIV/AIDS cases for the entire region");
+
 d3.json('data.json').get(function(error, data) {
   if (error) return console.error(error);
 
