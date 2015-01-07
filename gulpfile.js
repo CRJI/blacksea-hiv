@@ -57,20 +57,12 @@ gulp.task('data', function() {
   hiv_csv.forEach(function(row) {
     var adm0_a3 = row.ADM0_A3;
     delete row.ADM0_A3;
-    var cumulative = 0;
-    var data = [];
     d3.keys(row)
       .map(function(d) { return +d; })
       .sort()
       .map(function(year) {
-        var x = year - 2013;
-        var value = row[year] ? +row[year] : null;
-        if(adm0_a3 == 'ROU' && ! value && rodata[year]) {
-          row[year] = value = d3.round(rodata[year]);
-        }
-        cumulative += value;
-        if(value) {
-          data.push([x, cumulative]);
+        if(adm0_a3 == 'ROU' && (! row[year]) && rodata[year]) {
+          row[year] = d3.round(rodata[year]);
         }
       });
     var sum10y = d3.sum(d3.range(2004, 2014).map(function(year) {
