@@ -45,7 +45,7 @@ var y = d3.scale.linear()
 var xAxis = d3.svg.axis()
     .scale(x)
     .tickSize(6, 0)
-    .tickValues([1985, 1990, 1995, 2000, 2005, 2010]);
+    .tickValues([1995, 2000, 2005, 2010]);
 
 var yAxis = d3.svg.axis()
     .scale(y)
@@ -60,7 +60,7 @@ svg.append('text')
 d3.json('data.json').get(function(error, data) {
   if (error) return console.error(error);
 
-  var years = d3.keys(data.year).map(function(d) { return +d }).sort();
+  var years = d3.range(1995, 2014);
   var series = years.map(function(y) { return {year: y, value: data.year[y] } });
   x.domain(years);
   y.domain([0, d3.max(series, function(d) { return d.value })]);
