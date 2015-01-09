@@ -22,6 +22,7 @@ circle {
   opacity: .8;
   stroke-width: .5;
   stroke: black;
+  cursor: pointer;
 }
 
 .legend > rect {
@@ -36,6 +37,16 @@ circle {
   stroke-width: 1;
   stroke: #888;
   shape-rendering: crispEdges;
+}
+
+.overlay {
+  pointer-events: none;
+}
+
+.overlay rect {
+  fill: white;
+  opacity: .8;
+  stroke: #888;
 }
 </style>
 
@@ -104,6 +115,7 @@ d3.json('data.json').get(function(error, data) {
   d3.keys(country).forEach(function(adm0_a3) {
     country[adm0_a3].rate = data.country[adm0_a3].rate;
     country[adm0_a3].cp1kTotal = data.country[adm0_a3].cp1kTotal;
+    country[adm0_a3].last10y = data.country[adm0_a3].last10y;
   });
 
   circleGroup.selectAll('circle')
@@ -112,7 +124,10 @@ d3.json('data.json').get(function(error, data) {
       .attr('cx', function(d) { return projection(d.center)[0]; })
       .attr('cy', function(d) { return projection(d.center)[1]; })
       .attr('r', function(d) { return size(d.cp1kTotal); })
-      .attr('fill', function(d) { return color(d.rate); });
+      .attr('fill', function(d) { return color(d.rate); })
+      .on('mousemove', overlay);
+
+  svg.on('mousemove', clearOverlay);
 
   circleGroup.selectAll('text')
       .data(d3.values(country))
@@ -179,5 +194,21 @@ legendCircle.append('text')
     .text(function(d) { return d.cp1k * 100; })
     .each(function(d) { d3.select(this).attr('x', - this.getBBox().width / 2) });
 
+function overlay(country) {
+  d3.event.stopPropagation();
+  clearOverlay();
+  var c = projection(country.center);
+  var overlay = svg.append('g')
+      .attr('class', 'overlay')
+      .attr('transform', 'translate(' + (c[0] - width * .15) + ',' +
+                                        (c[1] - height * .15) + ')');
+  overlay.append('rect')
+      .attr('width', width * .3)
+      .attr('height', height * .3);
+}
+
+function clearOverlay() {
+  d3.selectAll('.overlay').remove();
+}
 
 </script>
