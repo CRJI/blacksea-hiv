@@ -39,14 +39,37 @@ circle {
   shape-rendering: crispEdges;
 }
 
-.overlay {
-  pointer-events: none;
+.overlay text.name {
+  font-size: 18px;
+}
+
+.overlay text.total {
+  font-size: 14px;
 }
 
 .overlay rect {
   fill: white;
-  opacity: .8;
+  opacity: .9;
   stroke: #888;
+}
+
+.overlay .graph rect {
+  fill: maroon;
+  stroke: none;
+  shape-rendering: crispEdges;
+}
+
+.overlay .axis text {
+  font-size: 12px;
+}
+
+.overlay .axis path {
+  fill: none;
+  stroke: black;
+}
+
+.overlay .axis line {
+  stroke: black;
 }
 </style>
 
@@ -198,13 +221,69 @@ function overlay(country) {
   d3.event.stopPropagation();
   clearOverlay();
   var c = projection(country.center);
+  var t = [d3.min([c[0] - width * .1, width * .68]),
+           d3.min([c[1] - height * .1, height * .68])];
   var overlay = svg.append('g')
       .attr('class', 'overlay')
-      .attr('transform', 'translate(' + (c[0] - width * .15) + ',' +
-                                        (c[1] - height * .15) + ')');
+      .attr('transform', 'translate(' + t + ')')
+      .on('mousemove', function() { d3.event.stopPropagation() });
+
   overlay.append('rect')
       .attr('width', width * .3)
       .attr('height', height * .3);
+
+  var x = d3.scale.ordinal().rangeBands([0, width * .2], .1);
+
+  var y = d3.scale.linear().range([height * .12, 0]);
+
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .tickSize(6, 0)
+      .tickValues([2005, 2009, 2013]);
+
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .ticks(2)
+      .orient('right');
+
+  var years = d3.range(2004, 2014);
+  var series = years.map(function(y, i) { return {year: y, value: country.last10y[i] } });
+  x.domain(years);
+  y.domain([0, d3.max(series, function(d) { return d.value })]);
+
+  overlay.append('text')
+      .attr('class', 'name')
+      .attr('x', width * .02)
+      .attr('y', height * .05)
+      .text(country.name);
+
+  overlay.append('text')
+      .attr('class', 'total')
+      .attr('x', width * .02)
+      .attr('y', height * .10)
+      .text("" + country.cp100kTotal + " cases per 100,000");
+
+  var graph = overlay.append('g')
+      .attr('class', 'graph')
+      .attr('transform', 'translate(' + width * .03 + ',' + height * .12 + ')');
+
+  graph.selectAll('rect')
+      .data(series)
+    .enter().append('rect')
+      .attr('x', function(d) { return x(d.year) })
+      .attr('y', function(d) { return y(d.value) })
+      .attr('width', x.rangeBand())
+      .attr('height', function(d) { return height * .12 - y(d.value) });
+
+  graph.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,' + (height * .12) + ')')
+      .call(xAxis);
+
+  graph.append('g')
+      .attr('class', 'y axis')
+      .attr('transform', 'translate(' + (width * .2) + ',0)')
+      .call(yAxis);
 }
 
 function clearOverlay() {
