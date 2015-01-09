@@ -89,8 +89,8 @@ var color = d3.scale.linear()
     .range(['#ddd', '#800'])
     .interpolate(d3.interpolateHcl);
 
-var size = function(cp1k) {
-    return Math.sqrt(cp1k) * .035 * width;
+var size = function(cp100k) {
+    return Math.sqrt(cp100k) * .0035 * width;
 };
 
 
@@ -114,7 +114,7 @@ d3.json('data.json').get(function(error, data) {
 
   d3.keys(country).forEach(function(adm0_a3) {
     country[adm0_a3].rate = data.country[adm0_a3].rate;
-    country[adm0_a3].cp1kTotal = data.country[adm0_a3].cp1kTotal;
+    country[adm0_a3].cp100kTotal = data.country[adm0_a3].cp100kTotal;
     country[adm0_a3].last10y = data.country[adm0_a3].last10y;
   });
 
@@ -123,7 +123,7 @@ d3.json('data.json').get(function(error, data) {
     .enter().append('circle')
       .attr('cx', function(d) { return projection(d.center)[0]; })
       .attr('cy', function(d) { return projection(d.center)[1]; })
-      .attr('r', function(d) { return size(d.cp1kTotal); })
+      .attr('r', function(d) { return size(d.cp100kTotal); })
       .attr('fill', function(d) { return color(d.rate); })
       .on('mousemove', overlay);
 
@@ -178,20 +178,20 @@ legend.append('text')
 
 var legendCircle = legend.selectAll('circle')
     .data([
-      {cp1k: 1, x: 50},
-      {cp1k: 3, x: 117},
-      {cp1k: 5, x: 210}
+      {cp100k: 100, x: 50},
+      {cp100k: 300, x: 117},
+      {cp100k: 500, x: 210}
     ])
   .enter().append('g')
     .attr('transform', function(d) {
         return 'translate(' + d.x + ',' + (-.01 * height) + ')' });
 
 legendCircle.append('circle')
-    .attr('r', function(d) { return size(d.cp1k) })
+    .attr('r', function(d) { return size(d.cp100k) })
     .attr('fill', color(0));
 
 legendCircle.append('text')
-    .text(function(d) { return d.cp1k * 100; })
+    .text(function(d) { return d.cp100k; })
     .each(function(d) { d3.select(this).attr('x', - this.getBBox().width / 2) });
 
 function overlay(country) {

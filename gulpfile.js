@@ -72,7 +72,7 @@ gulp.task('data', function() {
     var total = d3.sum(d3.values(row), function(d) { return +d; });
     rv.country[adm0_a3] = {
       rate: d3.round(sum10y / 10 / pop2010[adm0_a3] * 100000, 4),
-      cp1kTotal: d3.round(total / pop2010[adm0_a3] * 1000, 3),
+      cp100kTotal: d3.round(total / pop2010[adm0_a3] * 100000, 2),
       last10y: d3.range(2004, 2014).map(function(year) {
           return d3.round(+row[year]/pop2010[adm0_a3]*100000, 2); })
     };
