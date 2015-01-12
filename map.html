@@ -268,7 +268,7 @@ function overlay(country) {
       .attr('class', 'total')
       .attr('x', width * .02)
       .attr('y', height * .10)
-      .text("" + country.cp100kTotal + " cases per 100,000");
+      .text("" + d3.round(country.cp100kTotal) + " cases per 100,000");
 
   var graph = overlay.append('g')
       .attr('class', 'graph')
