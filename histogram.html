@@ -4,6 +4,7 @@
 <style>
 svg {
   shape-rendering: crispEdges;
+  font: 16px "Helvetica Neue", Helvetica, Arial, sans-serif
 }
 
 .axis path {
@@ -55,7 +56,7 @@ var yAxis = d3.svg.axis()
 svg.append('text')
     .attr('y', height * .05)
     .attr('x', width * .05)
-    .text("New HIV/AIDS cases for the entire region");
+    .text("New HIV/AIDS cases for the greater Black Sea region");
 
 d3.json('data.json').get(function(error, data) {
   if (error) return console.error(error);
