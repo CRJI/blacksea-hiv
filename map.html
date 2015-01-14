@@ -89,7 +89,7 @@ circle {
 
 var country = {
   ARM: {center: [44.7,40.2], label: [42.6,38.7], name: "Armenia"},
-  AZE: {center: [48.0,40.5], label: [46.6,41.4], name: "Azerbaijan"},
+  AZE: {center: [48.0,40.5], label: [45.8,41.4], name: "Azerbaijan"},
   BGR: {center: [25.4,42.8], label: [23.0,41.8], name: "Bulgaria"},
   BLR: {center: [28.4,53.9], label: [26.3,52.3], name: "Belarus"},
   GEO: {center: [43.5,42.0], label: [40.8,43.2], name: "Georgia"},
@@ -100,7 +100,7 @@ var country = {
   UKR: {center: [33.6,49.2], label: [26.7,49.9], name: "Ukraine"}
 }
 
-var width = 600,
+var width = 650,
     height = width * .75;
 
 var svg = d3.select('body').append('svg')
@@ -108,7 +108,7 @@ var svg = d3.select('body').append('svg')
     .attr('height', height);
 
 var projection = d3.geo.mercator()
-    .translate([-0.37 * width, 1.68 * width])
+    .translate([-0.24 * width, 1.68 * width])
     .scale(width * 1.4);
 
 var path = d3.geo.path()

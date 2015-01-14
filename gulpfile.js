@@ -13,7 +13,7 @@ gulp.task('topojson', function() {
   var p = child_process.exec(
     'ogr2ogr -f geojson /vsistdout/ ' +
     '_data/ne_10m_admin_0_countries/ne_10m_admin_0_countries.shp ' +
-    '-clipsrc 15 30 57 80 ' +
+    '-clipsrc 9 35 52 58 ' +
     '| topojson countries=/dev/fd/0 ' +
     '-s .000005 ' +
     '-p ADM0_A3 ' +
