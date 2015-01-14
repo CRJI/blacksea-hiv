@@ -32,8 +32,6 @@ circle {
 .legend > rect {
   opacity: .8;
   fill: white;
-  stroke-width: 1;
-  stroke: black;
   shape-rendering: crispEdges;
 }
 
@@ -171,9 +169,7 @@ var legend = svg.append('g')
     .attr('class', 'legend');
 
 legend.append('rect')
-    .attr('x', -2)
-    .attr('y', -2)
-    .attr('height', d3.round(height * .80))
+    .attr('height', height)
     .attr('width', d3.round(width * .25));
 
 legend.append('text').selectAll('tspan')
