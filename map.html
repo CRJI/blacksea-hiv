@@ -168,21 +168,23 @@ d3.json('data.json').get(function(error, data) {
 });
 
 var legend = svg.append('g')
-    .attr('class', 'legend')
-    .attr('transform', 'translate(0,' + height + ')');
+    .attr('class', 'legend');
 
 legend.append('rect')
     .attr('x', -2)
-    .attr('y', -.24 * height)
-    .attr('height', height * .24 + 2)
-    .attr('width', width * .45 + 2);
+    .attr('y', -2)
+    .attr('height', height * .80)
+    .attr('width', width * .25);
+
+legend.append('text').selectAll('tspan')
+    .data(["HIV/AIDS cases", "per 100,000 people"])
+  .enter().append('tspan')
+    .attr('x', width * .01)
+    .attr('dy', '1.2em')
+    .text(function(d) { return d })
 
 legend.append('text')
-    .attr('y', -.20 * height)
-    .text("HIV/AIDS cases per 100,000 population")
-
-legend.append('text')
-    .attr('y', -.14 * height)
+    .attr('y', .70 * height)
     .text("New every year");
 
 var legendBox = legend.selectAll('.box')
@@ -190,7 +192,7 @@ var legendBox = legend.selectAll('.box')
   .enter().append('g')
     .attr('class', 'box')
     .attr('transform', function(d, i) {
-        return 'translate(' + (115 + i * 50) + ',' + (-.14 * height - 15) + ')' });
+        return 'translate(' + (i * 50) + ',' + (.75 * height - 15) + ')' });
 
 legendBox.append('rect')
     .attr('width', 40)
@@ -203,18 +205,19 @@ legendBox.append('text')
     .each(function(d) { d3.select(this).attr('x', 20 - this.getBBox().width / 2) });
 
 legend.append('text')
-    .attr('y', -.07 * height)
+    .attr('x', .03 * width)
+    .attr('y', .17 * height)
     .text("Total");
 
 var legendCircle = legend.selectAll('circle')
     .data([
-      {cp100k: 100, x: 50},
-      {cp100k: 300, x: 117},
-      {cp100k: 500, x: 210}
+      {cp100k: 100, y: 80},
+      {cp100k: 300, y: 147},
+      {cp100k: 500, y: 245}
     ])
   .enter().append('g')
     .attr('transform', function(d) {
-        return 'translate(' + d.x + ',' + (-.01 * height) + ')' });
+        return 'translate(' + (.15 * width) + ',' + d.y + ')' });
 
 legendCircle.append('circle')
     .attr('r', function(d) { return size(d.cp100k) })
@@ -222,6 +225,7 @@ legendCircle.append('circle')
 
 legendCircle.append('text')
     .text(function(d) { return d.cp100k; })
+    .attr('y', '.3em')
     .each(function(d) { d3.select(this).attr('x', - this.getBBox().width / 2) });
 
 function overlay(country) {
