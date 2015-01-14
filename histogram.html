@@ -38,7 +38,7 @@ var graph = svg.append('g')
     .attr('transform', 'translate(' + (width * .05) + ',' + (height * .1) + ')');
 
 var x = d3.scale.ordinal()
-    .rangeBands([0, width * .8], .1);
+    .rangeRoundBands([0, width * .8], .1);
 
 var y = d3.scale.linear()
     .range([height * .8, 0]);
