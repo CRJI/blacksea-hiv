@@ -48,7 +48,7 @@ circle {
 }
 
 .overlay text.name {
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .overlay text.total {
@@ -184,15 +184,20 @@ legend.append('text').selectAll('tspan')
     .text(function(d) { return d })
 
 legend.append('text')
-    .attr('y', .70 * height)
-    .text("New every year");
+    .attr('y', .64 * height)
+  .selectAll('tspan')
+    .data(["Average growth,", "2004-2013"])
+  .enter().append('tspan')
+    .attr('x', 0)
+    .attr('dy', '1.2em')
+    .text(function(d) { return d })
 
 var legendBox = legend.selectAll('.box')
     .data([0, 25, 50])
   .enter().append('g')
     .attr('class', 'box')
     .attr('transform', function(d, i) {
-        return 'translate(' + d3.round(i * 50) + ',' + d3.round(.75 * height - 15) + ')' });
+        return 'translate(' + d3.round(i * 50) + ',' + d3.round(.77 * height - 15) + ')' });
 
 legendBox.append('rect')
     .attr('width', 40)
@@ -271,7 +276,7 @@ function overlay(country) {
   overlay.append('text')
       .attr('class', 'total')
       .attr('x', width * .02)
-      .attr('y', height * .10)
+      .attr('y', height * .09)
       .text("" + d3.round(country.cp100kTotal) + " cases per 100,000");
 
   var graph = overlay.append('g')
