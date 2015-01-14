@@ -62,7 +62,7 @@ circle {
 }
 
 .overlay .graph rect {
-  fill: maroon;
+  fill: #9e4839;
   stroke: none;
 }
 
@@ -116,8 +116,8 @@ var path = d3.geo.path()
 
 var color = d3.scale.linear()
     .domain([0, 50])
-    .range(['#ddd', '#800'])
-    .interpolate(d3.interpolateHcl);
+    .range(['#ddd', '#bb4906'])
+    .interpolate(d3.interpolateLab);
 
 var size = function(cp100k) {
     return Math.sqrt(cp100k) * .0035 * width;
