@@ -173,8 +173,8 @@ var legend = svg.append('g')
 legend.append('rect')
     .attr('x', -2)
     .attr('y', -2)
-    .attr('height', height * .80)
-    .attr('width', width * .25);
+    .attr('height', d3.round(height * .80))
+    .attr('width', d3.round(width * .25));
 
 legend.append('text').selectAll('tspan')
     .data(["HIV/AIDS cases", "per 100,000 people"])
@@ -192,7 +192,7 @@ var legendBox = legend.selectAll('.box')
   .enter().append('g')
     .attr('class', 'box')
     .attr('transform', function(d, i) {
-        return 'translate(' + (i * 50) + ',' + (.75 * height - 15) + ')' });
+        return 'translate(' + d3.round(i * 50) + ',' + d3.round(.75 * height - 15) + ')' });
 
 legendBox.append('rect')
     .attr('width', 40)
@@ -232,16 +232,16 @@ function overlay(country) {
   d3.event.stopPropagation();
   clearOverlay();
   var c = projection(country.center);
-  var t = [d3.min([c[0] - width * .1, width * .68]),
-           d3.min([c[1] - height * .1, height * .68])];
+  var t = [d3.round(d3.min([c[0] - width * .1, width * .68])),
+           d3.round(d3.min([c[1] - height * .1, height * .68]))];
   var overlay = svg.append('g')
       .attr('class', 'overlay')
       .attr('transform', 'translate(' + t + ')')
       .on('mousemove', function() { d3.event.stopPropagation() });
 
   overlay.append('rect')
-      .attr('width', width * .3)
-      .attr('height', height * .3);
+      .attr('width', d3.round(width * .3))
+      .attr('height', d3.round(height * .3));
 
   var x = d3.scale.ordinal().rangeRoundBands([0, width * .2], .2);
 
@@ -276,7 +276,8 @@ function overlay(country) {
 
   var graph = overlay.append('g')
       .attr('class', 'graph')
-      .attr('transform', 'translate(' + width * .03 + ',' + height * .12 + ')');
+      .attr('transform', 'translate(' + d3.round(width * .03) +
+                                  ',' + d3.round(height * .12) + ')');
 
   graph.selectAll('rect')
       .data(series)
@@ -288,12 +289,12 @@ function overlay(country) {
 
   graph.append('g')
       .attr('class', 'x axis')
-      .attr('transform', 'translate(0,' + (height * .12) + ')')
+      .attr('transform', 'translate(0,' + d3.round(height * .12) + ')')
       .call(xAxis);
 
   graph.append('g')
       .attr('class', 'y axis')
-      .attr('transform', 'translate(' + (width * .2) + ',0)')
+      .attr('transform', 'translate(' + d3.round(width * .2) + ',0)')
       .call(yAxis);
 }
 
