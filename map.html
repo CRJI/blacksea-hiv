@@ -235,7 +235,7 @@ function overlay(country) {
   clearOverlay();
   var c = projection(country.center);
   var t = [d3.round(d3.min([c[0] - width * .1, width * .68])),
-           d3.round(d3.min([c[1] - height * .1, height * .68]))];
+           d3.round(d3.min([c[1] - height * .1, height * .66]))];
   var overlay = svg.append('g')
       .attr('class', 'overlay')
       .attr('transform', 'translate(' + t + ')')
@@ -243,7 +243,7 @@ function overlay(country) {
 
   overlay.append('rect')
       .attr('width', d3.round(width * .3))
-      .attr('height', d3.round(height * .3));
+      .attr('height', d3.round(height * .32));
 
   var x = d3.scale.ordinal().rangeRoundBands([0, width * .2], .2);
 
@@ -275,6 +275,12 @@ function overlay(country) {
       .attr('x', width * .02)
       .attr('y', height * .09)
       .text("" + d3.round(country.cp100kTotal) + " cases per 100,000");
+
+  overlay.append('text')
+      .attr('class', 'total')
+      .attr('x', width * .10)
+      .attr('y', height * .305)
+      .text("new cases");
 
   var graph = overlay.append('g')
       .attr('class', 'graph')
