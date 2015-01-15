@@ -8,6 +8,12 @@ html, body {
   margin: 0;
 }
 
+#container {
+  width: 650px;
+  display: table;
+  margin: 0 auto;
+}
+
 svg {
   overflow: hidden;
   display: table;
@@ -88,6 +94,8 @@ circle {
 
 <body>
 
+<div id="container"></div>
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.1/d3.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
 <script>
@@ -109,7 +117,7 @@ var country = {
 var width = 650,
     height = width * .75;
 
-var svg = d3.select('body').append('svg')
+var svg = d3.select('#container').append('svg')
     .attr('width', width)
     .attr('height', height);
 

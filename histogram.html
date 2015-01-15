@@ -8,9 +8,13 @@ html, body {
   margin: 0;
 }
 
-svg {
+#container {
+  width: 600px;
   display: table;
   margin: 0 auto;
+}
+
+svg {
   shape-rendering: crispEdges;
   font: 16px Lato, "Helvetica Neue", Helvetica, Arial, sans-serif
 }
@@ -35,14 +39,16 @@ rect {
 
 <body>
 
+<div id="container"></div>
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.1/d3.min.js"></script>
 <script>
 'use strict';
 
-var width = 600,
+var width = 650,
     height = width * .5;
 
-var svg = d3.select('body').append('svg')
+var svg = d3.select('#container').append('svg')
     .attr('width', width)
     .attr('height', height);
 
